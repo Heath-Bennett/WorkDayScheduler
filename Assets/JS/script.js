@@ -9,11 +9,174 @@ $(document).ready(function(){
     const four = $("#fourPM");
     const five = $("#fivePM");
     const save = $("span.fa-save");
+    
+    // const schedNine = $("div.nine");
+    // const schedTen = $("div.ten");
+    // const schedEleven = $("div.eleven");
+    // const schedTwelve = $("div.twelve");
+    // const schedOne = $("div.one");
+    // const schedTwo = $("div.two");
+    // const schedThree = $("div.three");
+    // const schedFour = $("div.four");
+    // const schedFive = $("div.five");
+    const workDayHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
     let weekDay = "";
     let month = "";
     let now = luxon.DateTime;
     let date = now.local();
+    let hour = date.hour;
+    
+
+    let whatHour = function() {
+        // switch (hour){
+        //     case 9:
+        //         schedNine.removeClass("future");
+        //         schedNine.addClass('present');
+        //         break;
+        //     case 10:
+        //         schedNine.removeClass("present");
+        //         schedNine.addClass("past");
+        //         schedTen.removeClass("future");
+        //         schedTen.addClass("present");
+        //         break;
+        //     case 11:
+        //         schedTen.removeClass("present");
+        //         schedTen.addClass("past");
+        //         schedEleven.removeClass("future");
+        //         schedEleven.addClass("present");
+        //         break;
+        //     case 12:
+        //         schedEleven.removeClass("present");
+        //         schedEleven.addClass("past");
+        //         schedTwelve.removeClass("future");
+        //         schedTwelve.addClass("present");
+        //         break;
+        //     case 13:
+        //         schedTwelve.removeClass("present");
+        //         schedTwelve.addClass("past");
+        //         schedOne.removeClass("future");
+        //         schedOne.addClass("present");
+        //         break;
+        //     case 14:
+        //         schedOne.removeClass("present");
+        //         schedOne.addClass("past");
+        //         schedTwo.removeClass("future");
+        //         schedTwo.addClass("present");
+        //         break;
+        //     case 15:
+        //         schedTwo.removeClass("present");
+        //         schedTwo.addClass("past");
+        //         schedThree.removeClass("future");
+        //         schedThree.addClass("present");
+        //         break;
+        //     case 16:
+        //         schedThree.removeClass("present");
+        //         schedThree.addClass("past");
+        //         schedFour.removeClass("future");
+        //         schedFour.addClass("present");
+        //         break;
+        //     case 17:
+        //         schedFour.removeClass("present");
+        //         schedFour.addClass("past");
+        //         schedFive.removeClass("future");
+        //         schedFive.addClass("present");
+        //         break;
+        //     default:
+        //         schedNine.removeClass("past");
+        //         schedTen.removeClass("past");
+        //         schedEleven.removeClass("past");
+        //         schedTwelve.removeClass("past");
+        //         schedOne.removeClass("past");
+        //         schedTwo.removeClass("past");
+        //         schedThree.removeClass("past");
+        //         schedFour.removeClass("past");
+        //         schedFive.removeClass("present");
+        //         schedNine.addClass("future");
+        //         schedTen.addClass("future");
+        //         schedEleven.addClass("future");
+        //         schedTwelve.addClass("future");
+        //         schedOne.addClass("future");
+        //         schedTwo.addClass("future");
+        //         schedThree.addClass("future");
+        //         schedFour.addClass("future");
+        //         schedFive.addClass("future");
+        //         $("textarea").val("");
+        //         break;
+
+        // }
+
+        for (let i = 0; i < workDayHours.length; i++){
+            let currentHour = "";
+
+            switch (workDayHours[i]){
+                case 9:
+                    currentHour = "div.nine";
+                    break;
+                case 10:
+                    currentHour = "div.ten";
+                    break;
+                case 11:
+                    currentHour = "div.eleven";
+                    break;
+                case 12:
+                    currentHour = "div.twelve";
+                    break;
+                case 13:
+                    currentHour = "div.one";
+                    break;
+                case 14:
+                    currentHour = "div.two";
+                    break;
+                case 15:
+                    currentHour = "div.three";
+                    break;
+                case 16:
+                    currentHour = "div.four";
+                    break;
+                case 17:
+                    currentHour = "div.five";
+            }
+
+            if (hour <= 17 && workDayHours[i] < hour){
+                $(currentHour).removeClass("future");
+                $(currentHour).removeClass("present");
+                $(currentHour).addClass("past");
+            }
+            else if (hour <= 17 && workDayHours[i] == hour){
+                $(currentHour).removeClass("future");
+                $(currentHour).removeClass("past");
+                $(currentHour).addClass("present");
+            }
+            else if (hour <= 17 && workDayHours[i] > hour){
+                $(currentHour).removeClass("present");
+                $(currentHour).removeClass("past");
+                $(currentHour).addClass("future");
+            }
+            else{
+                $(currentHour).removeClass("present");
+                $(currentHour).removeClass("past");
+                $(currentHour).addClass("future");
+                saveSchedule();
+
+            }
+        }
+    }
+
+    let saveSchedule = function(){
+
+        localStorage.setItem("nineAM", nine.val());
+        localStorage.setItem("tenAM", ten.val());
+        localStorage.setItem("elevenAM", eleven.val());
+        localStorage.setItem("twelvePM", twelve.val());
+        localStorage.setItem("onePM", one.val());
+        localStorage.setItem("twoPM", two.val());
+        localStorage.setItem("threePM", three.val());
+        localStorage.setItem("fourPM", four.val());
+        localStorage.setItem("fivePM", five.val());
+    };
+
+    
 
     let setDay = function() {
         let today = date.weekday;
@@ -142,23 +305,14 @@ $(document).ready(function(){
     let init = function(){
         getSchedule();
     }
-
-    save.on("click", function(){
-
-        localStorage.setItem("nineAM", nine.val());
-        localStorage.setItem("tenAM", ten.val());
-        localStorage.setItem("elevenAM", eleven.val());
-        localStorage.setItem("twelvePM", twelve.val());
-        localStorage.setItem("onePM", one.val());
-        localStorage.setItem("twoPM", two.val());
-        localStorage.setItem("threePM", three.val());
-        localStorage.setItem("fourPM", four.val());
-        localStorage.setItem("fivePM", five.val());
-    });
     
     init();
     setDay();
     setMonth();
     displayDate();
+    whatHour();
 
+    save.on("click", saveSchedule);
+
+    
 }); 
