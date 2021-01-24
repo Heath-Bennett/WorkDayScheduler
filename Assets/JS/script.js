@@ -9,37 +9,115 @@ $(document).ready(function(){
     const four = $("#fourPM");
     const five = $("#fivePM");
     const save = $("span.fa-save");
+    
+    const workDayHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
-    let weekDay = "";
+    let dayOfWeek = "";
     let month = "";
     let now = luxon.DateTime;
     let date = now.local();
+    let hour = date.hour;
+    
+
+    let whatHour = function() {
+       
+        for (let i = 0; i < workDayHours.length; i++){
+            let currentHour = "";
+
+            switch (workDayHours[i]){
+                case 9:
+                    currentHour = "div.nine";
+                    break;
+                case 10:
+                    currentHour = "div.ten";
+                    break;
+                case 11:
+                    currentHour = "div.eleven";
+                    break;
+                case 12:
+                    currentHour = "div.twelve";
+                    break;
+                case 13:
+                    currentHour = "div.one";
+                    break;
+                case 14:
+                    currentHour = "div.two";
+                    break;
+                case 15:
+                    currentHour = "div.three";
+                    break;
+                case 16:
+                    currentHour = "div.four";
+                    break;
+                case 17:
+                    currentHour = "div.five";
+            }
+
+            if (hour <= 17 && workDayHours[i] < hour){
+                $(currentHour).removeClass("future");
+                $(currentHour).removeClass("present");
+                $(currentHour).addClass("past");
+            }
+            else if (hour <= 17 && workDayHours[i] == hour){
+                $(currentHour).removeClass("future");
+                $(currentHour).removeClass("past");
+                $(currentHour).addClass("present");
+            }
+            else if (hour <= 17 && workDayHours[i] > hour){
+                $(currentHour).removeClass("present");
+                $(currentHour).removeClass("past");
+                $(currentHour).addClass("future");
+            }
+            else{
+                $(currentHour).removeClass("present");
+                $(currentHour).removeClass("past");
+                $(currentHour).addClass("future");
+                saveSchedule();
+            }
+        }
+    }
+
+    let saveSchedule = function(){
+
+        localStorage.setItem("nineAM", nine.val());
+        localStorage.setItem("tenAM", ten.val());
+        localStorage.setItem("elevenAM", eleven.val());
+        localStorage.setItem("twelvePM", twelve.val());
+        localStorage.setItem("onePM", one.val());
+        localStorage.setItem("twoPM", two.val());
+        localStorage.setItem("threePM", three.val());
+        localStorage.setItem("fourPM", four.val());
+        localStorage.setItem("fivePM", five.val());
+    };
+
+    
 
     let setDay = function() {
         let today = date.weekday;
-
+        
         switch (today) {
-            case 0: 
-                weekDay = "Sunday";
-                break;
             case 1:
-                weekDay = "Monday";
+                dayOfWeek = "Monday";
                 break;
             case 2: 
-                weekDay = "Tuesday";
+                dayOfWeek = "Tuesday";
                 break;
             case 3:
-                weekDay = "Wednesday";
+                dayOfWeek = "Wednesday";
                 break;
             case 4:
-                weekDay = "Thursday";
+                dayOfWeek = "Thursday";
                 break;
             case 5:
-                weekDay = "Friday";
+                dayOfWeek = "Friday";
                 break;
             case 6:
-                weekDay = "Saturday";
+                dayOfWeek = "Saturday";
                 break;
+            case 7:
+                dayOfWeek = "Sunday";
+                break;
+                
         }
 
     }
@@ -88,7 +166,7 @@ $(document).ready(function(){
     }
 
     let displayDate = function(){
-        $("#currentDay").text(weekDay + ", " + month + " " + date.day);
+        $("#currentDay").text(dayOfWeek + ", " + month + " " + date.day);
     }
 
     let getSchedule = function (){
@@ -142,23 +220,14 @@ $(document).ready(function(){
     let init = function(){
         getSchedule();
     }
-
-    save.on("click", function(){
-
-        localStorage.setItem("nineAM", nine.val());
-        localStorage.setItem("tenAM", ten.val());
-        localStorage.setItem("elevenAM", eleven.val());
-        localStorage.setItem("twelvePM", twelve.val());
-        localStorage.setItem("onePM", one.val());
-        localStorage.setItem("twoPM", two.val());
-        localStorage.setItem("threePM", three.val());
-        localStorage.setItem("fourPM", four.val());
-        localStorage.setItem("fivePM", five.val());
-    });
     
     init();
     setDay();
     setMonth();
     displayDate();
+    whatHour();
 
+    save.on("click", saveSchedule);
+
+    
 }); 
